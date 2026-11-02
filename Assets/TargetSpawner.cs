@@ -24,11 +24,24 @@ public class TargetSpawner : MonoBehaviour
         int dir = (row % 2 == 0) ? 1 : -1;
         Vector3 pos = new Vector3(-dir * 11f, rowHeights[row], 0f);
 
-        switch (Random.Range(0, 3))
+        string[] types = { "Duck", "Rabbit", "Owl" };
+        SpawnByType(types[Random.Range(0, types.Length)], pos, dir);
+    }
+
+    public Target SpawnByType(string typeName, Vector3 pos, int dir)
+    {
+        switch (typeName)
         {
-            case 0: director.BuildDuck(pos, dir); break;
-            case 1: director.BuildRabbit(pos, dir); break;
-            default: director.BuildOwl(pos, dir); break;
+            case "Duck": return director.BuildDuck(pos, dir);
+            case "Rabbit": return director.BuildRabbit(pos, dir);
+            case "Owl": return director.BuildOwl(pos, dir);
+            default: return null;
         }
+    }
+
+    public void ClearTargets()
+    {
+        foreach (Target t in FindObjectsByType<Target>(FindObjectsSortMode.None))
+            Destroy(t.gameObject);
     }
 }
